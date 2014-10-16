@@ -3,6 +3,10 @@ require_relative 'game'
 def play
 	puts "WELCOME TO TIC TAC TOE!!!"
 	puts ''
+	puts "TicTacToe is usually played with 3x3 grid"
+	puts "Please enter a number N, from 3 to 6, to play a NxN grid"
+	puts "Or press enter to play the default 3x3 game"
+	n = gets.chomp
 	puts "Enter first player's name: "
 	first_name = gets.chomp
 	first_name = 'Player1' if first_name.empty?
@@ -11,7 +15,8 @@ def play
 	second_name = 'Player2' if second_name.empty?
 	players = [Player.new(first_name, 'X'), Player.new(second_name, 'O')]
 
-	game = Game.new(players)
+	game = n.to_i.between?(3, 6) ? Game.new(players, n.to_i) : Game.new(players)
+
 	puts "#{game.current_name} was randomnly selected to start."
 	puts "The board is numbered from 1 to #{game.num_of_cells}"
 
