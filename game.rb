@@ -2,12 +2,12 @@ require_relative 'board'
 require_relative 'player'
 
 class Game
-	#attr_accessor :players, :current_player, :other_player, :mapping, :board
+	attr_reader :players, :current_player, :other_player, :num_to_coord, :board
 	def initialize(players, board = 3)
 			@players = players
 			@current_player, @other_player = @players.shuffle
 			@board = Board.new(board)
-			@mapping = Hash[(1..@board.grid.length**2).zip(get_cell_coords)]
+			@num_to_coord = Hash[(1..@board.grid.length**2).zip(get_cell_coords)]
 	end
 
 	def get_move(number = gets.chomp)
@@ -15,9 +15,8 @@ class Game
 		if valid_move?(number)
 			make_move(number)
 			return true
-		else 
-			return false
 		end
+			return false
 	end
 
 	def print
@@ -28,8 +27,8 @@ class Game
 		@current_player.name.capitalize
 	end
 
-	def current_color
-		@current_player.color
+	def current_symbol
+		@current_player.symbol
 	end
 
 	def num_of_cells
@@ -37,41 +36,38 @@ class Game
 	end 
 
 	def over?
-		if @board.game_won? == true
+		if @board.game_won? 
 			puts "#{@other_player.name.capitalize} has won!!!"
 			return true
-		elsif @board.game_over? == true
+		elsif @board.game_over?
 			puts "The game has ended in a tie!!!"
 			return true
 		end
+		false
 	end
 	
 	private
 	def make_move(number)
-		coord = @mapping[number]
-		@board.update_board(coord, @current_player.color)
+		coord = @num_to_coord[number]
+		@board.update_board(coord, @current_player.symbol)
 		@current_player, @other_player = @other_player, @current_player
 	end
 
 	def valid_move?(num)
-		coord = @mapping.fetch(num, nil)
+		coord = @num_to_coord.fetch(num, nil)
 		return false unless coord
 		cell = @board.get_cell(coord) 
-		if cell.empty?
-			return true
-		else
-			return false
-		end
+		cell.empty? ? true : false
 	end
 
 	def get_cell_coords
 		coords = []
 		@board.grid.each_with_index do |row, row_index|
-			row.each_with_index do |cell, col_index|
-				coords << [row_index, col_index]
-			end
+			row.each_with_index{ |col, col_index| coords << [row_index, col_index] }
 		end
-		coords
+		return coords
 	end
+
 end
+
 

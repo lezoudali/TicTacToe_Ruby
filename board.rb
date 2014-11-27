@@ -12,21 +12,18 @@ class Board
 			end
 			puts ''
 		end
-		''
 	end
 
 	def game_over?
 		grid.each do |row|
-			row.each do |cell|
-				return false if cell.empty?
-			end
+			row.each { |cell| return false if cell.empty? }
 		end
 		true
 	end
 
 	def game_won?
 		winning_arrays.each do |array|
-			return true if all_same?(array)
+			return true if same?(array)
 		end
 		false
 	end
@@ -34,25 +31,22 @@ class Board
 	def get_cell(coord)
 		grid[coord[0]][coord[1]]
 	end
-
 	
-	def update_board(coord, color)
+	def update_board(coord, symbol)
 		row = coord[0]
 		col = coord[1]
-		@grid[row][col] = color
+		@grid[row][col] = symbol
 	end
 
 	private
 	def winning_arrays
 		arrays = 	grid + grid.transpose 
 		arrays << (0..grid.length-1).map{ |i| grid[i][i]} 
-		arrays << (0..grid.length-1).to_a.zip((0..grid.length-1).to_a.reverse).map do |i, j|
-									grid[i][j]
-							end 
+		arrays << (0..grid.length-1).to_a.zip((0..grid.length-1).to_a.reverse).map{ |i, j| grid[i][j]}
 		return arrays
 	end
 
-	def all_same?(array)
+	def same?(array)
 		array.all? {|element| element == array[0]  && !element.empty?}
 	end
 
