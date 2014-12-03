@@ -6,8 +6,12 @@ class Board
 
 	def show
 		grid.each_with_index do |row, row_index|
-			row.each_with_index do |cell, col_index| 
-				print cell.empty? ? '_' : cell
+			row.each_with_index do |cell, col_index|
+				if cell.empty?
+					print row_index < grid.length-1 ? '_' : ' '
+				else 
+					print cell
+				end
 				print '|' if col_index < grid.length-1
 			end
 			puts ''
