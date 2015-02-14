@@ -1,3 +1,5 @@
+# testing c9.io push
+
 class Board 
 	attr_reader :grid
 	def initialize(n = 3)
